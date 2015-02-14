@@ -1,10 +1,8 @@
-/** @jsx React.DOM */
-
 var React = require('react');
 var guid = 0;
 var k = function(){};
 var addClass = require('./add-class');
-var ComboboxOption = require('./option');
+var ComboboxOption = require('./option.jsx');
 
 module.exports = React.createClass({
 
