@@ -1,5 +1,5 @@
 var React = require('react');
-var addClass = require('./add-class');
+var addClass = require('./className').addClass;
 
 module.exports = React.createClass({
 

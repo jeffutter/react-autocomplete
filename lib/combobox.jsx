@@ -1,7 +1,8 @@
 var React = require('react');
 var guid = 0;
 var k = function(){};
-var addClass = require('./add-class');
+var addClass = require('./className').addClass;
+var removeClass = require('./className').removeClass;
 var ComboboxOption = require('./option.jsx');
 
 module.exports = React.createClass({
@@ -352,8 +353,15 @@ module.exports = React.createClass({
   },
 
   focusOption: function() {
-    var index = this.state.focusedIndex;
-    this.refs.list.getDOMNode().childNodes[index].focus();
+    var fn,
+        index = this.state.focusedIndex,
+        node,
+        nodes = this.refs.list.getDOMNode().childNodes;
+    for (var i = 0, l = nodes.length; i < l; i++) {
+      fn = (i === index) ? addClass : removeClass;
+      node = nodes[i];
+      node.className = fn(node.className, 'rf-combobox-option-focus');
+    }
   },
 
   render: function() {

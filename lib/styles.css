@@ -25,10 +25,10 @@
   display: block;
 }
 
-.rf-combobox-option:focus {
+.rf-combobox-option-focus {
   outline: 0;
   color: white;
-  background: hsl(200, 50%, 50%);
+  background: #4095BF;
 }
 
 .rf-combobox-input {
