@@ -1,4 +1,7 @@
 /** @jsx React.DOM */
+require('es5-shim');
+require('es5-shim/es5-sham');
+
 var React = require('react');
 //var Autocomplete = require('react-autocomplete');
 var Autocomplete = require('../../lib/main');
