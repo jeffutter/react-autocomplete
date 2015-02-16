@@ -189,6 +189,8 @@ module.exports = React.createClass({
       this.props.children.length === 0
     ) return;
     var input = this.refs.input.getDOMNode();
+    // disable this feature for IE8, since it doesn't support setSelectionRange
+    if (!input.setSelectionRange) return;
     var inputValue = input.value;
     var firstChild = this.props.children.length ?
       this.props.children[0] :
