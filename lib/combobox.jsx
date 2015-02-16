@@ -353,14 +353,18 @@ module.exports = React.createClass({
   },
 
   focusOption: function() {
-    var fn,
+    var focusedClass = 'rf-combobox-option-focus',
         index = this.state.focusedIndex,
         node,
         nodes = this.refs.list.getDOMNode().childNodes;
     for (var i = 0, l = nodes.length; i < l; i++) {
-      fn = (i === index) ? addClass : removeClass;
       node = nodes[i];
-      node.className = fn(node.className, 'rf-combobox-option-focus');
+      if (i === index) {
+        node.className = addClass(node.className, focusedClass);
+        node.focus();
+      } else {
+        node.className = removeClass(node.className, focusedClass);
+      }
     }
   },
 
