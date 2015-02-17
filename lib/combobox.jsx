@@ -374,7 +374,6 @@ module.exports = React.createClass({
         <input
           ref="input"
           className="rf-combobox-input"
-          defaultValue={this.props.value}
           value={this.state.inputValue}
           onChange={this.handleInputChange}
           onBlur={this.handleInputBlur}
