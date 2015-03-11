@@ -85,7 +85,7 @@ var App = React.createClass({
   }
 });
 
-React.renderComponent(<App/>, document.body);
+React.render(<App/>, document.body);
 
 function throttle(delay, fn){
   var context, timeout, result, args,
