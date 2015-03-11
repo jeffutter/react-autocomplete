@@ -9,7 +9,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "react": "^0.13.0"
+    "react": "^0.13.0",
+    "merge": "^1.2.0"
   },
   "devDependencies": {
     "es5-shim": "^4.1.0",

@@ -1,3 +1,4 @@
+var merge = require('merge');
 var React = require('react');
 var addClass = require('./className').addClass;
 
@@ -29,10 +30,12 @@ module.exports = React.createClass({
 
   render: function() {
     var props = this.props;
-    if (props.isSelected)
-      props.className = addClass(props.className, 'rf-combobox-selected');
+    if (props.isSelected) {
+      props = merge({}, props, {
+        className: addClass(props.className, 'rf-combobox-selected')
+      });
+    }
     return React.DOM.div(props);
   }
 
 });
-

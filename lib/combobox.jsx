@@ -1,3 +1,4 @@
+var merge = require('merge');
 var React = require('react');
 var guid = 0;
 var k = function(){};
@@ -95,27 +96,28 @@ module.exports = React.createClass({
     var activedescendant;
     var isEmpty = true;
     children = children || this.props.children;
-    React.Children.forEach(children, function(child, index) {
+    var menuChildren = React.Children.map(children, function(child, index) {
       if (child.type !== ComboboxOption.type)
         // allow random elements to live in this list
-        return;
-       isEmpty = false;
-      // TODO: cloneWithProps and map instead of altering the children in-place
-      var props = child.props;
+        return child;
+      isEmpty = false;
+      var props = merge({}, child.props, {
+        onBlur: this.handleOptionBlur,
+        onClick: this.selectOption.bind(this, child),
+        onFocus: this.handleOptionFocus,
+        onKeyDown: this.handleOptionKeyDown.bind(this, child),
+        onMouseEnter: this.handleOptionMouseEnter.bind(this, index)
+      });
       if (this.state.value === props.value) {
         // need an ID for WAI-ARIA
         props.id = props.id || 'rf-combobox-selected-'+(++guid);
-        props.isSelected = true
+        props.isSelected = true;
         activedescendant = props.id;
       }
-      props.onBlur = this.handleOptionBlur;
-      props.onClick = this.selectOption.bind(this, child);
-      props.onFocus = this.handleOptionFocus;
-      props.onKeyDown = this.handleOptionKeyDown.bind(this, child);
-      props.onMouseEnter = this.handleOptionMouseEnter.bind(this, index);
+      return React.cloneElement(child, props);
     }.bind(this));
     return {
-      children: children,
+      children: menuChildren,
       activedescendant: activedescendant,
       isEmpty: isEmpty
     };
