@@ -1,8 +1,10 @@
+var merge = require('merge');
 var React = require('react');
 var guid = 0;
 var k = function(){};
-var addClass = require('./add-class');
-var ComboboxOption = require('./option');
+var addClass = require('./className').addClass;
+var removeClass = require('./className').removeClass;
+var ComboboxOption = require('./option.jsx');
 
 module.exports = React.createClass({
 
@@ -94,27 +96,28 @@ module.exports = React.createClass({
     var activedescendant;
     var isEmpty = true;
     children = children || this.props.children;
-    React.Children.forEach(children, function(child, index) {
+    var menuChildren = React.Children.map(children, function(child, index) {
       if (child.type !== ComboboxOption.type)
         // allow random elements to live in this list
-        return;
-       isEmpty = false;
-      // TODO: cloneWithProps and map instead of altering the children in-place
-      var props = child.props;
+        return child;
+      isEmpty = false;
+      var props = merge({}, child.props, {
+        onBlur: this.handleOptionBlur,
+        onClick: this.selectOption.bind(this, child),
+        onFocus: this.handleOptionFocus,
+        onKeyDown: this.handleOptionKeyDown.bind(this, child),
+        onMouseEnter: this.handleOptionMouseEnter.bind(this, index)
+      });
       if (this.state.value === props.value) {
         // need an ID for WAI-ARIA
         props.id = props.id || 'rf-combobox-selected-'+(++guid);
-        props.isSelected = true
+        props.isSelected = true;
         activedescendant = props.id;
       }
-      props.onBlur = this.handleOptionBlur;
-      props.onClick = this.selectOption.bind(this, child);
-      props.onFocus = this.handleOptionFocus;
-      props.onKeyDown = this.handleOptionKeyDown.bind(this, child);
-      props.onMouseEnter = this.handleOptionMouseEnter.bind(this, index);
+      return React.cloneElement(child, props);
     }.bind(this));
     return {
-      children: children,
+      children: menuChildren,
       activedescendant: activedescendant,
       isEmpty: isEmpty
     };
@@ -189,6 +192,8 @@ module.exports = React.createClass({
       this.props.children.length === 0
     ) return;
     var input = this.refs.input.getDOMNode();
+    // disable this feature for IE8, since it doesn't support setSelectionRange
+    if (!input.setSelectionRange) return;
     var inputValue = input.value;
     var firstChild = this.props.children.length ?
       this.props.children[0] :
@@ -350,8 +355,19 @@ module.exports = React.createClass({
   },
 
   focusOption: function() {
-    var index = this.state.focusedIndex;
-    this.refs.list.getDOMNode().childNodes[index].focus();
+    var focusedClass = 'rf-combobox-option-focus',
+        index = this.state.focusedIndex,
+        node,
+        nodes = this.refs.list.getDOMNode().childNodes;
+    for (var i = 0, l = nodes.length; i < l; i++) {
+      node = nodes[i];
+      if (i === index) {
+        node.className = addClass(node.className, focusedClass);
+        node.focus();
+      } else {
+        node.className = removeClass(node.className, focusedClass);
+      }
+    }
   },
 
   render: function() {
@@ -360,7 +376,6 @@ module.exports = React.createClass({
         <input
           ref="input"
           className="rf-combobox-input"
-          defaultValue={this.props.value}
           value={this.state.inputValue}
           onChange={this.handleInputChange}
           onBlur={this.handleInputBlur}

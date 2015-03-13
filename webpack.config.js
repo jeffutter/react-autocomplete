@@ -8,7 +8,7 @@ function buildEntries() {
     }
     var isDraft = dir.charAt(0) === '_';
     if (!isDraft && fs.lstatSync(path.join('examples', dir)).isDirectory()) {
-      entries[dir] = './examples/'+dir+'/'+'main.js';
+      entries[dir] = './examples/'+dir+'/'+'main.jsx';
     }
     return entries;
   }, {});
@@ -26,7 +26,7 @@ module.exports = {
 
   module: {
     loaders: [
-      {test: /\.js$/, loader: 'jsx-loader'}
+      {test: /\.jsx$/, loader: 'jsx-loader'}
     ]
   }
 };
