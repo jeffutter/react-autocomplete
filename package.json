@@ -15,11 +15,14 @@
   "devDependencies": {
     "es5-shim": "^4.1.0",
     "jsx-loader": "^0.12.2",
-    "webpack": "^1.7.2",
-    "rf-release": "^0.1.2"
+    "reactify": "^1.1.0",
+    "rf-release": "^0.1.2",
+    "webpack": "^1.7.2"
   },
   "browserify": {
-    "transform": ["reactify"]
+    "transform": [
+      "reactify"
+    ]
   },
   "tags": [
     "react",
